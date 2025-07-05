@@ -22,3 +22,6 @@ coverage/
 *.ipr
 *.iws
 .DS_Store
+
+# Claude Code
+CLAUDE.md

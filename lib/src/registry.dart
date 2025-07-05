@@ -199,7 +199,10 @@ class TypeRegistry {
 
     if (type == null) return '';
 
-    buffer.writeln('$indent$rootType');
+    if (indent.isEmpty) {
+      // Only write the root name if this is the top level
+      buffer.writeln(rootType);
+    }
 
     // Add subclasses
     final subclasses = findSubclassesOf(rootType);
@@ -208,11 +211,21 @@ class TypeRegistry {
       final prefix = isLast ? '└── ' : '├── ';
       final childIndent = isLast ? '    ' : '│   ';
 
-      buffer.write('$indent$prefix');
-      buffer.write(getHierarchyTree(
+      buffer.write('$indent$prefix${subclasses[i].name}');
+
+      // Add children of this subclass
+      final childTree = getHierarchyTree(
         subclasses[i].name,
         indent: indent + childIndent,
-      ));
+      );
+
+      // If there are children, add a newline before them
+      if (childTree.isNotEmpty) {
+        buffer.writeln();
+        buffer.write(childTree);
+      } else {
+        buffer.writeln();
+      }
     }
 
     return buffer.toString();
