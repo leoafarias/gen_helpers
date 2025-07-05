@@ -1,0 +1,23 @@
+name: gen_helpers
+description: Simple type discovery based on inheritance for Dart code generators
+version: 0.1.0
+repository: https://github.com/leofarias/gen_helpers
+
+topics:
+  - code-generation
+  - build-runner
+  - type-discovery
+  - inheritance
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  analyzer: '>=5.0.0 <7.0.0'
+  build: ^2.0.0
+  source_gen: ^1.0.0
+
+dev_dependencies:
+  test: ^1.24.0
+  build_test: ^2.0.0
+  lints: ^3.0.0

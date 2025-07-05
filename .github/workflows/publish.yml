@@ -1,0 +1,38 @@
+name: Publish to pub.dev
+
+on:
+  push:
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+*' # e.g. v1.0.0 or v1.0.0-beta.1
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write # Required for authentication using OIDC
+      contents: read
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: dart-lang/setup-dart@v1
+        with:
+          sdk: stable
+      
+      - name: Install dependencies
+        run: dart pub get
+      
+      - name: Run tests
+        run: dart test
+      
+      - name: Verify version matches tag
+        run: |
+          VERSION=$(grep '^version:' pubspec.yaml | cut -d' ' -f2)
+          TAG=${GITHUB_REF#refs/tags/v}
+          if [ "$VERSION" != "$TAG" ]; then
+            echo "Version mismatch: pubspec.yaml has $VERSION but tag is $TAG"
+            exit 1
+          fi
+      
+      - name: Publish to pub.dev
+        run: dart pub publish --force
